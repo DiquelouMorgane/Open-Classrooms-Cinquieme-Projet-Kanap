@@ -5,22 +5,31 @@ function showProducts() {
         return res.json();
     })
     .then(function(data) {
-        showProducts(data);
+        formatProducts(data);
     })
     .catch(function(err){
     });
 }
 //Insert products in the Index page//
-function showProducts(data) {
-    for (products of data) {
-    const items = document.getElementById()
-    items.innerHTML = "<a href="./product.html?id=42"><article>
-                        <img src=".../product01.jpg" alt="Lorem ipsum dolor sit amet, Kanap name1">
-                        <h3 class="productName">Kanap name1</h3>
-                        <p class="productDescription">Dis enim malesuada risus sapien gravida nulla nisl arcu. Dis enim malesuada risus sapien gravida nulla nisl arcu.</p>
-                        </article>
-                        </a>"}
+function formatProducts(data) {
+    let itemsContent = '';
+
+    for (let product of data) {
+        itemsContent += `
+            <a href="./product.html?id=42">
+                <article>
+                    <img src="${product.imageUrl}" alt="${product.altTxt}">
+                    <h3 class="productName">${product.name}</h3>
+                    <p class="productDescription">${product.description}</p>
+                </article>
+            </a>`
+    }
+
+    var div = document.createElement('div');
+    div.innerHTML = itemsContent
+
+    document.getElementById('items').appendChild(div)
+}
     window.onload=function(){
         showProducts();
     }
-}}
