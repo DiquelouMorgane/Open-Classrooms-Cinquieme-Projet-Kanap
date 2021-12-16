@@ -1,7 +1,7 @@
 //retrieve the product id//
-var str = "http://localhost:3000/api/products";
-var url = new URL(str);
-var id = url.searchParams.get("id");
+const str = window.location.href;
+const url = new URL(str);
+const productId = url.searchParams.get("id");
 
 //create details products constants//
 const itemImage = document.getElementsByClassName('item_img');
@@ -12,19 +12,16 @@ const itemColors = document.getElementById('colors');
 
 //retrieve the product in data base//
 function cardProducts(){
-    fetch("http://localhost:3000/api/products"+itemId)
+    fetch("http://localhost:3000/api/products/${productId}")
     .then(function(res) {
         return res.json();
     })
     .then(function(data) {
-        catchProducts(data);
+        document.querySelector(".item__img").innerHTML = `<img src=${data.imageUrl} alt="${data.altTxt}">`
+        document.querySelector("#title").innerHTML = `${data.name}`
+        document.querySelector("#price").innerText = `${data.price}`
+        document.querySelector("#description").innerText = `${data.description}`
     })
     .catch(function(err){
     });
-}
-function catchProducts(data) {
-    itemImage.innerHTML = `<img src="${data.imageUrl}" alt="${data.altTxt}">`;
-    itemTitle.innerHTML = `<h1>${data.name}</h1>`;
-    itemPrice.innerText = `${data.price}`;
-    itemDescription.innerText = `${data.description}`;    
-}
+};
