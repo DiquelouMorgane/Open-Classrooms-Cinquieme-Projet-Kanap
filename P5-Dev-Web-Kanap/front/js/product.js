@@ -1,6 +1,14 @@
 //retrieve the product id//
 const productId = getProductId();
 const productContent = getCardProducts(productId);
+const colorChoice = document.getElementById("colors");
+const quantityChoice = document.getElementById("quantity");
+
+let productOptions = {
+    id: productId,
+    color: colorChoice,
+    quantity: quantityChoice,
+  };
 
 function getProductId () {
     const url = new URLSearchParams(window.location.search); 
@@ -30,3 +38,11 @@ function cardProducts(data) {
       }
     }
 };
+//Add the products in the basket//
+//catch the wanted product//
+let getLocalStorage = JSON.parse(localStorage.getItem("productOptions"));
+//stock the wanted product in the LocalStorage//
+const addToCart = document.getElementById("addToCart");
+addToCart.addEventListener("click", function() {
+    localStorage.setItem("product",JSON.stringify(getLocalStorage));
+});
