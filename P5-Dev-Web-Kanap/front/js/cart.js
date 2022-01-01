@@ -1,27 +1,21 @@
 //retrieve the wanted product//
-function getProductContent(productId) {
-    return fetch("http://localhost:3000/api/products/" + productId)
-    .then(function (res) {
-        return res.json();
-    })
-    .then(function (product) {
-        return product;
-    })
-    .catch(function (error) {
-        alert(error);
-    });
-}
+let productInBasket = JSON.parse(localStorage.getItem("cart"));
 //insert the wanted product in the basket//
-function basketContent(data) {
-    cart_Items.innerHTML = `<article class="cart__item" data-id="${product.id}" data-color="${product.color}">
+if (productInBasket === null){
+  console.log("Votre panier est vide, n'hésitez pas à aller découvrir nos kanapés !");
+}
+else {
+  for (let product in productInBasket){
+    document.querySelector(".cart").innerHTML += `<section id="cart__items">
+    <article class="cart__item" data-id="${product.id}" data-color="${product.color}">
     <div class="cart__item__img">
-      <img src="${data.imageUrl}" alt="${data.altTxt}">
+      <img src="${product.imageUrl}" alt="${product.altTxt}">
     </div>
     <div class="cart__item__content">
       <div class="cart__item__content__description">
-        <h2>${data.name}</h2>
-        <p>${data.color}</p>
-        <p>${data.price}</p>
+        <h2>${product.name}</h2>
+        <p>${product.color}</p>
+        <p>${product.price}</p>
       </div>
       <div class="cart__item__content__settings">
         <div class="cart__item__content__settings__quantity">
@@ -33,5 +27,7 @@ function basketContent(data) {
         </div>
       </div>
     </div>
-  </article>`
+  </article>
+  </section>`
+  }
 }
