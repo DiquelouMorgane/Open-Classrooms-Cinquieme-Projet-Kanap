@@ -44,5 +44,5 @@ let getLocalStorage = JSON.parse(localStorage.getItem("productOptions"));
 //stock the wanted product in the LocalStorage//
 const addToCart = document.getElementById("addToCart");
 addToCart.addEventListener("click", function() {
-    localStorage.setItem("product",JSON.stringify(getLocalStorage));
+    localStorage.setItem("cart",JSON.stringify([{id: productId, color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}]));
 });
