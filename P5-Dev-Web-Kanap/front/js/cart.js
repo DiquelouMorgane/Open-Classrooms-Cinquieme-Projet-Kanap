@@ -1,8 +1,10 @@
 //retrieve the wanted product//
-let productInBasket = JSON.parse(localStorage.getItem("cart"));
+function getProduct(){
+let productId = getProductId();
+let productInBasket = JSON.stringify(localStorage.getItem("cart",JSON.stringify([{id: productId, color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}])));
 //insert the wanted product in the basket//
-if (productInBasket === null){
-  console.log("Votre panier est vide, n'hésitez pas à aller découvrir nos kanapés !");
+if (productInBasket == null){
+  let emptyMessage ="Votre panier est vide, n'hésitez pas à aller découvrir nos kanapés !";
 }
 else {
   for (let product in productInBasket){
@@ -19,8 +21,8 @@ else {
       </div>
       <div class="cart__item__content__settings">
         <div class="cart__item__content__settings__quantity">
-          <p>Qté : ${product.quantity}</p>
-          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
+          <p>Qté :</p>
+          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${product.quantity}">
         </div>
         <div class="cart__item__content__settings__delete">
           <p class="deleteItem">Supprimer</p>
@@ -30,4 +32,4 @@ else {
   </article>
   </section>`
   }
-}
+}}
