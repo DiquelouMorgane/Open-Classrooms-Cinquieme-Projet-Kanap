@@ -32,4 +32,8 @@ else {
   </article>
   </section>`
   }
+  const removeItem = document.getElementsByClassName("deleteItem");
+  removeItem.addEventListener("click", function(){
+    localStorage.removeItem("cart");
+  });
 }}
