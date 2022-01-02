@@ -36,4 +36,9 @@ else {
   removeItem.addEventListener("click", function(){
     localStorage.removeItem("cart");
   });
-}}
+  let input = document.querySelector('.cart__item__content__settings__quantity');
+  let result = document.querySelector('.itemQuantity');
+  input.addEventListener('change', function(){
+    result.textContent = this.value;
+})}
+}
