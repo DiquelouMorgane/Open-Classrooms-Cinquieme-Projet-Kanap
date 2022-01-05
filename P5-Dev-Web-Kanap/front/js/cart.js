@@ -51,7 +51,7 @@ orderForm.firstName.addEventListener('change', function() {
 })
 //check the firstNameScope//
 function checkFirstName(firstNameScope) {
-  let firstNameRegEx = /[A-Za-z]+g/;
+  let firstNameRegEx = /[A-Za-z]/;
   let testingFirstName = firstNameRegEx.test(firstNameScope.value);
   if (testingFirstName) {
     document.querySelector('#firstNameErrorMsg').innerText = '';
@@ -67,7 +67,7 @@ orderForm.lastName.addEventListener('change', function() {
 })
 //check the lastNameScope//
 function checkLastName(lastNameScope) {
-  let lastNameRegEx = /[A-Za-z]+g/;
+  let lastNameRegEx = /[A-Za-z]/;
   let testingLastName = lastNameRegEx.test(lastNameScope.value);
   if (testingLastName) {
     document.querySelector('#lastNameErrorMsg').innerText = '';
@@ -83,7 +83,7 @@ orderForm.address.addEventListener('change', function() {
 })
 //check the addressScope//
 function checkAdress(addressScope) {
-  let addressRegEx = /[A-Za-z.-_]+g/;
+  let addressRegEx = /[A-Za-z.-_]/;
   let testingAddress = addressRegEx.test(addressScope.value);
   if (testingAddress) {
     document.querySelector('#addressErrorMsg').innerText = '';
@@ -99,7 +99,7 @@ orderForm.city.addEventListener('change', function() {
 })
 //check the cityScope//
 function checkCity(cityScope) {
-  let cityRegEx = /^[0-9_]{5,}[A-Za-z]+g/;
+  let cityRegEx = /^[0-9_]{5,}[A-Za-z]/;
   let testingCity = cityRegEx.test(cityScope.value);
   if (testingCity) {
     document.querySelector('#cityErrorMsg').innerText = '';
@@ -115,7 +115,7 @@ orderForm.email.addEventListener('change', function() {
 })
 //check the emailScope//
 function checkEmail(emailScope) {
-  let emailRegEx = /^[A-Za-z0-9.-_][@]{1}[A-Za-z0-9.-_][.]{1}[a-z]{2,3}+g/;
+  let emailRegEx = /^[A-Za-z0-9.-_][@]{1}[A-Za-z0-9.-_][.]{1}[a-z]{2,3}/;
   let testingEmail = emailRegEx.test(emailScope.value);
   if (testingEmail) {
     document.querySelector('#emailErrorMsg').innerText = '';
@@ -127,11 +127,11 @@ function checkEmail(emailScope) {
 }
 //Listen to the submit form//
 const fullForm = {
-  firstName = document.querySelector('#firstName').value,
-  lastName = document.querySelector('#lastName').value,
-  address = document.querySelector('#address').value,
-  city = document.querySelector('#city').value,
-  email = document.querySelector('#email')
+  firstName : document.querySelector('#firstName').value,
+  lastName : document.querySelector('#lastName').value,
+  address : document.querySelector('#address').value,
+  city : document.querySelector('#city').value,
+  email : document.querySelector('#email')
 };
 // Set the full form in the Local Storage//
 localStorage.setItem("cart",JSON.stringify(fullForm));
