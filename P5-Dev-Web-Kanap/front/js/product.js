@@ -1,14 +1,6 @@
 //retrieve the product id//
 const productId = getProductId();
 const productContent = getCardProducts(productId);
-const colorChoice = document.getElementById("colors");
-const quantityChoice = document.getElementById("quantity");
-
-let productOptions = {
-    id: productId,
-    color: colorChoice,
-    quantity: quantityChoice,
-  };
 
 function getProductId () {
     const url = new URLSearchParams(window.location.search); 
@@ -37,13 +29,12 @@ function cardProducts(data) {
         );
       }
     }
-};
 //Add the products in the basket//
-//catch the wanted product//
-let getLocalStorage = JSON.parse(localStorage.getItem("productOptions"));
 //stock the wanted product in the LocalStorage//
 const addToCart = document.getElementById("addToCart");
 addToCart.addEventListener("click", function() {
-    localStorage.setItem("cart",JSON.stringify([{id: productId, color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}]));
-//if/else to avoid repetitive elements//
+    localStorage.setItem("cart",JSON.stringify([{id: productId, imageUrl: document.getElementsByClassName('item__img'), altTxt: document.getElementsByClassName('item__img'), name: document.getElementById('title'), color: document.getElementById('colors').value, price: document.getElementById('price'), quantity: document.getElementById('quantity').value}]));
+console.log(localStorage);
+    //if/else to avoid repetitive elements//
 });
+};
