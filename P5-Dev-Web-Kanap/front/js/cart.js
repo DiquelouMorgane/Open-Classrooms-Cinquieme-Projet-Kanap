@@ -126,26 +126,33 @@ function checkEmail(emailScope) {
   }
 }
 //Listen to the submit form//
-const fullForm = {
+const contact = {
   firstName : document.querySelector('#firstName').value,
   lastName : document.querySelector('#lastName').value,
   address : document.querySelector('#address').value,
   city : document.querySelector('#city').value,
   email : document.querySelector('#email')
 };
-// Set the full form in the Local Storage//
-localStorage.setItem("cart",JSON.stringify(fullForm));
 //Validation of scopes//
-if (checkFirstName(fullForm.firstName)
-    && checkLastName(fullForm.lastName)
-    && checkAdress(fullForm.address)
-    && checkCity(fullForm.city)
-    && checkEmail(fullForm.email)) {
+if (checkFirstName(contact.firstName)
+    && checkLastName(contact.lastName)
+    && checkAdress(contact.address)
+    && checkCity(contact.city)
+    && checkEmail(contact.email)) {
       alert('Le formulaire a bien été envoyé.');
     }
-  const formToSend = {
-    cartStorage,
-    fullForm
-  };
-  console.log(formToSend);
+//Create an order object//
+const formToSend = {
+  cartStorage,
+  contact
+};
+//Send the order to the server//
+fetch("http://localhost:3000/api/products/order"),{
+  method: "POST",
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(formToSend)
+};
 }
