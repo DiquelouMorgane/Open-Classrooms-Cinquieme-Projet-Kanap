@@ -147,12 +147,13 @@ const formToSend = {
   contact
 };
 //Send the order to the server//
-fetch("http://localhost:3000/api/products/order"),{
-  method: "POST",
-  headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(formToSend)
-};
-}
+order.addEventListener("click", function(){
+  fetch("http://localhost:3000/api/products/order" + productId),{
+    method: "POST",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formToSend)
+  };
+})}
