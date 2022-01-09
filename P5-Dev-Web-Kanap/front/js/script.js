@@ -13,7 +13,6 @@ function showProducts() {
 //Insert products in the Index page//
 function formatProducts(data) {
     let itemsContent = '';
-
     for (let product of data) {
         itemsContent += `
             <a href="./product.html?id=${product._id}">
@@ -24,12 +23,11 @@ function formatProducts(data) {
                 </article>
             </a>`
     }
-
     var div = document.createElement('div');
     div.innerHTML = itemsContent
-
     document.getElementById('items').appendChild(div)
 }
-    window.onload=function(){
-        showProducts();
-    }
+//load the elements during the loading page //
+window.onload=function(){
+    showProducts();
+}

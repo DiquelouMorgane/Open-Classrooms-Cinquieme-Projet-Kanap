@@ -1,48 +1,61 @@
+//---------------------------------------------------------------Basket Products------------------------------------------------------------------//
+let cartStorage = JSON.parse(localStorage.getItem("cart"));
+const orderButton = document.getElementById("order");
 //retrieve the wanted product//
 function getProduct(){
   let cartItems = document.getElementById('cart__items');
-  let cartStorage = JSON.parse(localStorage.getItem("cart"));
   console.log(cartStorage);
   //insert the wanted product in the basket//
-for (let data of cartStorage){
-  if (cartStorage == null){
-    cartItems.innerHTML = "Votre panier est vide, n'hésitez pas à aller découvrir nos kanapés !";
-  } else {
-    cartItems.innerHTML = `<article class="cart__item" data-id="${data.id}" data-color="${data.color}">
-    <div class="cart__item__img">
-      <img src="${data.imageUrl}" alt="${data.altTxt}">
-    </div>
-    <div class="cart__item__content">
-      <div class="cart__item__content__description">
-        <h2>${data.name}</h2>
-        <p>${data.color}</p>
-        <p>${data.price}</p>
+  for (let data of cartStorage){
+    //if the basket is empty//
+    if (cartStorage === null){
+      cartItems.innerHTML = "<p>Votre panier est vide, n'hésitez pas à aller découvrir nos kanapés !</p>";
+    } else {
+      //If the basket is not empty//
+      cartItems.innerHTML = `<article class="cart__item" data-id="${data.id}" data-color="${data.color}">
+      <div class="cart__item__img">
+        <img src="${data.imageUrl}" alt="${data.altTxt}">
       </div>
-      <div class="cart__item__content__settings">
-        <div class="cart__item__content__settings__quantity">
-          <p>Qté :</p>
-          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${data.quantity}">
+      <div class="cart__item__content">
+        <div class="cart__item__content__description">
+          <h2>${data.name}</h2>
+          <p>${data.color}</p>
+          <p>${data.price}</p>
         </div>
-        <div class="cart__item__content__settings__delete">
-          <p class="deleteItem">Supprimer</p>
+        <div class="cart__item__content__settings">
+          <div class="cart__item__content__settings__quantity">
+            <p>Qté :</p>
+            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${data.quantity}">
+          </div>
+          <div class="cart__item__content__settings__delete">
+            <p class="deleteItem">Supprimer</p>
+          </div>
         </div>
       </div>
-    </div>
-  </article>`;
-  }}
-  const removeItem = document.getElementsByClassName("deleteItem");
-  removeItem.addEventListener("click", function(){
-    localStorage.removeItem("cart");
-  });
-  let input = document.querySelector('.cart__item__content__settings__quantity');
-  let result = document.querySelector('.itemQuantity');
-  input.addEventListener('change', function(){
-    result.textContent = this.value;
+    </article>`;
+    }
+  }
+}
+getProduct();
+//change the quantity of the product//
+let input = document.querySelector('.itemQuantity');
+input.addEventListener('change', function(){
+  localStorage.setItem("cart",JSON.stringify([{quantity: document.getElementById('quantity').value}]));
+  console.log(localStorage);
 })
+//load the elements during the loading page //
 window.onload=function(){
   getProduct();
 }
 //---------------------------------------------------------------Form part------------------------------------------------------------------//
+//Create a contact object//
+const contact = {
+  firstName : document.querySelector('#firstName').value,
+  lastName : document.querySelector('#lastName').value,
+  address : document.querySelector('#address').value,
+  city : document.querySelector('#city').value,
+  email : document.querySelector('#email').value
+};
 //retrieve the form//
 let orderForm = document.querySelector('.cart__order__form');
 //listen to firstNameScope changes//
@@ -99,7 +112,7 @@ orderForm.city.addEventListener('change', function() {
 })
 //check the cityScope//
 function checkCity(cityScope) {
-  let cityRegEx = /^[0-9_]{5,}[A-Za-z]/;
+  let cityRegEx = /[A-Za-z]/;
   let testingCity = cityRegEx.test(cityScope.value);
   if (testingCity) {
     document.querySelector('#cityErrorMsg').innerText = '';
@@ -115,7 +128,7 @@ orderForm.email.addEventListener('change', function() {
 })
 //check the emailScope//
 function checkEmail(emailScope) {
-  let emailRegEx = /^[A-Za-z0-9.-_][@]{1}[A-Za-z0-9.-_][.]{1}[a-z]{2,3}/;
+  let emailRegEx = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,3}/;
   let testingEmail = emailRegEx.test(emailScope.value);
   if (testingEmail) {
     document.querySelector('#emailErrorMsg').innerText = '';
@@ -125,35 +138,55 @@ function checkEmail(emailScope) {
     return false;
   }
 }
-//Listen to the submit form//
-const contact = {
-  firstName : document.querySelector('#firstName').value,
-  lastName : document.querySelector('#lastName').value,
-  address : document.querySelector('#address').value,
-  city : document.querySelector('#city').value,
-  email : document.querySelector('#email')
-};
 //Validation of scopes//
 if (checkFirstName(contact.firstName)
     && checkLastName(contact.lastName)
     && checkAdress(contact.address)
     && checkCity(contact.city)
     && checkEmail(contact.email)) {
-      alert('Le formulaire a bien été envoyé.');
+      //Create an order object//
+      let formToSend = {
+        cartStorage,
+        contact
+      };
     }
-//Create an order object//
-const formToSend = {
-  cartStorage,
-  contact
-};
-//Send the order to the server//
-order.addEventListener("click", function(){
-  fetch("http://localhost:3000/api/products/order" + productId),{
+//If everything okay, redirect to the confirmation page//
+function send(e) {
+  e.preventDefault();
+  //Send the order to the server//
+  fetch("http://localhost:3000/api/products/order"), {
     method: "POST",
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(formToSend)
-  };
-})}
+    body: JSON.stringify(formToSend.value)
+    .then (function(res) {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+    .then (function(value) {
+      document
+        .getElementById('orderId')
+        .innerText = value.postData.text;
+    })
+  }
+  document
+    .getElementById('order')
+    .addEventListener('submit', send);
+};
+console.log(send);
+//---------------------------------------------------------------Confirmation part------------------------------------------------------------------//
+function getCardProducts(productId){
+  fetch("http://localhost:3000/api/products/" + productId)
+  .then(function(res) {
+      return res.json();
+  })
+  .then(function(data) {
+      product = data;
+      cardProducts (data);
+  })
+  .catch(function(err){
+  });
+}
