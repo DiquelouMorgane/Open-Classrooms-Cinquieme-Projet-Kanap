@@ -43,6 +43,14 @@ input.addEventListener('change', function(){
   localStorage.setItem("cart",JSON.stringify([{quantity: document.getElementById('quantity').value}]));
   console.log(localStorage);
 })
+//delete products no longer wanted//
+function deleteItem () {
+  const removeItem = document.getElementsByClassName("deleteItem");
+  removeItem.addEventListener("click", function(){
+    storage.removeItem("cartStorage",JSON.stringify([{...product,color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}]));
+  });
+};
+deleteItem();
 //load the elements during the loading page //
 window.onload=function(){
   getProduct();
