@@ -1,5 +1,5 @@
 //---------------------------------------------------------------Basket Products------------------------------------------------------------------//
-let cartStorage = JSON.parse(localStorage.getItem("cart"));
+let cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
 const orderButton = document.getElementById("order");
 //retrieve the wanted product//
 function getProduct(){
@@ -37,12 +37,25 @@ function getProduct(){
   }
 }
 getProduct();
-//change the quantity of the product//
-let input = document.querySelector('.itemQuantity');
-input.addEventListener('change', function(){
-  localStorage.setItem("cart",JSON.stringify([{quantity: document.getElementById('quantity').value}]));
-  console.log(localStorage);
-})
+function changeQty() {
+  let input = document.querySelectorAll('.itemQuantity'); //NodeList
+  let i = input.length-1;
+
+  input[i].addEventListener('change', function() {
+      if (this.value <= 0) {
+          this.value = 0;
+          cartStorage.splice(i, 1);
+      } else if (this.value > 100) {
+          this.value = 100;
+          cartStorage[i].quantity = this.value;
+      } else {
+          cartStorage[i].quantity = this.value;
+      }
+      localStorage.setItem('cartStorage', JSON.stringify(cartStorage));
+      location.reload();
+  })
+}
+changeQty();
 //delete products no longer wanted//
 function deleteItem () {
   const removeItem = document.getElementsByClassName("deleteItem");
