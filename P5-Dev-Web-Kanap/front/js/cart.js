@@ -37,7 +37,8 @@ function getProduct(){
   }
 }
 getProduct();
-function changeQty() {
+//change the quantity of the product//
+function changeQuantity() {
   let input = document.querySelectorAll('.itemQuantity'); //NodeList
   let i = input.length-1;
 
@@ -55,7 +56,7 @@ function changeQty() {
       location.reload();
   })
 }
-changeQty();
+changeQuantity();
 //delete products no longer wanted//
 function deleteItem () {
   const removeItem = document.getElementsByClassName("deleteItem");
@@ -69,14 +70,6 @@ window.onload=function(){
   getProduct();
 }
 //---------------------------------------------------------------Form part------------------------------------------------------------------//
-//Create a contact object//
-const contact = {
-  firstName : document.querySelector('#firstName').value,
-  lastName : document.querySelector('#lastName').value,
-  address : document.querySelector('#address').value,
-  city : document.querySelector('#city').value,
-  email : document.querySelector('#email').value
-};
 //retrieve the form//
 let orderForm = document.querySelector('.cart__order__form');
 //listen to firstNameScope changes//
@@ -159,55 +152,45 @@ function checkEmail(emailScope) {
     return false;
   }
 }
-//Validation of scopes//
-if (checkFirstName(contact.firstName)
-    && checkLastName(contact.lastName)
-    && checkAdress(contact.address)
-    && checkCity(contact.city)
-    && checkEmail(contact.email)) {
-      //Create an order object//
-      let formToSend = {
-        cartStorage,
-        contact
-      };
-    }
-//If everything okay, redirect to the confirmation page//
-function send(e) {
-  e.preventDefault();
-  //Send the order to the server//
-  fetch("http://localhost:3000/api/products/order"), {
-    method: "POST",
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(formToSend.value)
-    .then (function(res) {
+//listen to form submit//
+orderForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+  //Create a contact object with the form data//
+  const contact = {
+    firstName : document.querySelector('#firstName').value,
+    lastName : document.querySelector('#lastName').value,
+    address : document.querySelector('#address').value,
+    city : document.querySelector('#city').value,
+    email : document.querySelector('#email').value
+  };
+  //Validation of scopes//
+  if (checkFirstName(contact.firstName)
+  && checkLastName(contact.lastName)
+  && checkAdress(contact.address)
+  && checkCity(contact.city)
+  && checkEmail(contact.email)) {
+    //Create an order object//
+    const formToSend = {
+      cartStorage,
+      contact
+    };
+    //send the formToSend to the API//
+    let url = 'http://localhost:3000/api/products/order';
+    fetch (url, {
+      method: 'POST',
+      body: JSON.stringify(formToSend),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then (function(res) {
       if (res.ok) {
         return res.json();
       }
-    })
-    .then (function(value) {
-      document
-        .getElementById('orderId')
-        .innerText = value.postData.text;
+    }).then (function(data) {
+      location.replace(`./confirmation.html?id=${data.orderId}`);
+    }).catch(function(error) {
+      console.log('Oups, une erreur est survenue :' + error);
     })
   }
-  document
-    .getElementById('order')
-    .addEventListener('submit', send);
-};
-console.log(send);
-//---------------------------------------------------------------Confirmation part------------------------------------------------------------------//
-function getCardProducts(productId){
-  fetch("http://localhost:3000/api/products/" + productId)
-  .then(function(res) {
-      return res.json();
-  })
-  .then(function(data) {
-      product = data;
-      cardProducts (data);
-  })
-  .catch(function(err){
-  });
-}
+})
