@@ -31,13 +31,11 @@ function cardProducts(data) {
         );
       }
     }
-//Send the selected product in the basket//
 //stock the wanted product in the LocalStorage//
 const addToCart = document.getElementById("addToCart");
 addToCart.addEventListener("click", function() {
     console.log(product)
     localStorage.setItem("cartStorage",JSON.stringify([{...product,color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}]));
     console.log(localStorage);
-    //if/else to avoid repetitive elements//
     });
 };

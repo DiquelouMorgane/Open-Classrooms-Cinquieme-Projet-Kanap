@@ -57,14 +57,45 @@ function changeQuantity() {
   })
 }
 changeQuantity();
-//delete products no longer wanted//
+/*//delete products no longer wanted//
 function deleteItem () {
-  const removeItem = document.getElementsByClassName("deleteItem");
-  removeItem.addEventListener("click", function(){
-    storage.removeItem("cartStorage",JSON.stringify([{...product,color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}]));
-  });
+  let deleteButton = document.querySelectorAll('deleteItem');
+  let i = deleteButton.length-1;
+  deleteButton[i].addEventListener('click', function() {
+    cartStorage.splice(i, 1);
+    localStorage.setItem('cartStorage', JSON.stringify(cartStorage));
+    location.reload();
+  })
 };
 deleteItem();
+//calculate the total price//
+function basketTotalPrice() {
+  let input = document.querySelector('.itemQuantity')
+  let i = input.length-1;
+  let inputProduct = input[i].closest('article');
+  let productId = inputProduct.dataset.id;
+  let productColor = inputProduct.dataset.color;
+  let totalPrice = 0;
+  if (inputProduct.getAttribute('data-color') === productColor && inputProduct.getAttribute('data-id') === productId) {
+    for (i = 0; i < cartStorage.length; i++) {
+      let quantity = cartStorage[i].quantity;
+      let unitPrice = cartStorage[i].price;
+      let productPrice = Number(quantity) *Number(unitPrice);
+      totalPrice += productPrice;
+    }
+  }
+  document.querySelector('#totalPrice').innerText = totalPrice;
+}
+basketTotalPrice();
+//calculate the total articles//
+function basketTotalArticles() {
+  let finalQuantity = 0;
+  for (let i = 0; i < cartStorage.length; i++) {
+    finalQuantity += Number(cartStorage[i].quantity);
+  };
+  document.querySelector('#totalQuantity').innerText = finalQuantity;
+}
+basketTotalArticles();*/  
 //load the elements during the loading page //
 window.onload=function(){
   getProduct();
@@ -142,8 +173,8 @@ orderForm.email.addEventListener('change', function() {
 })
 //check the emailScope//
 function checkEmail(emailScope) {
-  let emailRegEx = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,3}/;
-  let testingEmail = emailRegEx.test(emailScope.value);
+  let emailRegEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  let testingEmail = emailRegEx.test(emailScope);
   if (testingEmail) {
     document.querySelector('#emailErrorMsg').innerText = '';
     return true;
@@ -171,7 +202,7 @@ orderForm.addEventListener('submit', function(event) {
   && checkEmail(contact.email)) {
     //Create an order object//
     const formToSend = {
-      cartStorage,
+      products: cartStorage.map(p => p._id),
       contact
     };
     //send the formToSend to the API//
@@ -192,5 +223,9 @@ orderForm.addEventListener('submit', function(event) {
     }).catch(function(error) {
       console.log('Oups, une erreur est survenue :' + error);
     })
+    console.log(formToSend);
   }
 })
+/*function confirmOrder () {
+  document.querySelector('#orderId').innerHTML = `<span id="orderId"><!-- 65431343444684674 --></span>`;
+}*/
