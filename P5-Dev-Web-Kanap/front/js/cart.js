@@ -1,3 +1,12 @@
+//Redirection to confirmation page condition//
+function confirmOrder (){
+  let str = window.location.href;
+  if (str === './confirmation.html'){
+    let newUrl = new URL(str);
+    let orderId = newUrl.searchParams.get('id');
+    document.querySelector('#orderId').innerHTML = `<span id="${orderId}"><!-- 65431343444684674 --></span>`;
+  }
+}
 //---------------------------------------------------------------Basket Products------------------------------------------------------------------//
 let cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
 const orderButton = document.getElementById("order");
@@ -104,8 +113,8 @@ window.onload=function(){
 //retrieve the form//
 let orderForm = document.querySelector('.cart__order__form');
 //listen to firstNameScope changes//
-orderForm.firstName.addEventListener('change', function() {
-  checkFirstName(this);
+orderForm.firstName.addEventListener('change', function(event) {
+  checkFirstName(event.target.value);
 })
 //check the firstNameScope//
 function checkFirstName(firstNameScope) {
@@ -120,8 +129,8 @@ function checkFirstName(firstNameScope) {
   }
 }
 //listen to nameScope changes//
-orderForm.lastName.addEventListener('change', function() {
-  checkLastName(this);
+orderForm.lastName.addEventListener('change', function(event) {
+  checkLastName(event.target.value);
 })
 //check the lastNameScope//
 function checkLastName(lastNameScope) {
@@ -136,8 +145,8 @@ function checkLastName(lastNameScope) {
   }
 }
 //listen to addressScope changes//
-orderForm.address.addEventListener('change', function() {
-  checkAdress(this);
+orderForm.address.addEventListener('change', function(event) {
+  checkAdress(event.target.value);
 })
 //check the addressScope//
 function checkAdress(addressScope) {
@@ -152,8 +161,8 @@ function checkAdress(addressScope) {
   }
 }
 //listen to cityScope changes//
-orderForm.city.addEventListener('change', function() {
-  checkCity(this);
+orderForm.city.addEventListener('change', function(event) {
+  checkCity(event.target.value);
 })
 //check the cityScope//
 function checkCity(cityScope) {
@@ -168,12 +177,12 @@ function checkCity(cityScope) {
   }
 }
 //listen to emailScope changes//
-orderForm.email.addEventListener('change', function() {
-  checkEmail(this);
+orderForm.email.addEventListener('change', function(event) {
+  checkEmail(event.target.value);
 })
 //check the emailScope//
 function checkEmail(emailScope) {
-  let emailRegEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  let emailRegEx = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   let testingEmail = emailRegEx.test(emailScope);
   if (testingEmail) {
     document.querySelector('#emailErrorMsg').innerText = '';
@@ -194,6 +203,7 @@ orderForm.addEventListener('submit', function(event) {
     city : document.querySelector('#city').value,
     email : document.querySelector('#email').value
   };
+  console.log(event);
   //Validation of scopes//
   if (checkFirstName(contact.firstName)
   && checkLastName(contact.lastName)
@@ -209,11 +219,11 @@ orderForm.addEventListener('submit', function(event) {
     let url = 'http://localhost:3000/api/products/order';
     fetch (url, {
       method: 'POST',
-      body: JSON.stringify(formToSend),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify(formToSend)
     }).then (function(res) {
       if (res.ok) {
         return res.json();
@@ -223,9 +233,5 @@ orderForm.addEventListener('submit', function(event) {
     }).catch(function(error) {
       console.log('Oups, une erreur est survenue :' + error);
     })
-    console.log(formToSend);
   }
 })
-/*function confirmOrder () {
-  document.querySelector('#orderId').innerHTML = `<span id="orderId"><!-- 65431343444684674 --></span>`;
-}*/
