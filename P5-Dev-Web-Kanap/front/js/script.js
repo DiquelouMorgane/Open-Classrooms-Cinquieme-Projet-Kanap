@@ -1,3 +1,4 @@
+//--------------------------------------------------------API Call-------------------------------------------------------------//
 //Get all the products from the API//
 function showProducts() {
     fetch("http://localhost:3000/api/products")
@@ -10,6 +11,7 @@ function showProducts() {
     .catch(function(err){
     });
 }
+//--------------------------------------------------------Index Content-------------------------------------------------------------//
 //Insert products in the Index page//
 function formatProducts(data) {
     let itemsContent = '';
