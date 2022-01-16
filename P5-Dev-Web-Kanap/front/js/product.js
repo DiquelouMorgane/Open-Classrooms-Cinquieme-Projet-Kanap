@@ -67,14 +67,12 @@ function newProductObject (arrayData) {
     } else {
         cartStorage.push(newProduct);
     }
-    //Save the new Basket if new quantity, color or product//
-    localStorage.setItem('cartStorage', JSON.stringify(cartStorage));
-}
-/*//save the wanted product in the LocalStorage//
-const addToCart = document.getElementById("addToCart");
-addToCart.addEventListener("click", function() {
-    console.log(product)
-    localStorage.setItem("cartStorage",JSON.stringify([{...product,color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}]));
-    console.log(localStorage);
-    });*/
+    //save the wanted product in the LocalStorage//
+    const addToCart = document.getElementById("addToCart");
+    addToCart.addEventListener("click", function() {
+        console.log(product)
+        localStorage.setItem("cartStorage",JSON.stringify([{...product,color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}]));
+        console.log(localStorage);
+        });
+    }
 };
