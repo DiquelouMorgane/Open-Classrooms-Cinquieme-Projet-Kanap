@@ -8,19 +8,14 @@ function confirmOrder (){
   }
 }
 //---------------------------------------------------------------Basket Products------------------------------------------------------------------//
-let cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
-const orderButton = document.getElementById("order");
-//retrieve the wanted product//
-function getProduct(){
-  let cartItems = document.getElementById('cart__items');
-  console.log(cartStorage);
-  //insert the wanted product in the basket//
-  for (let data of cartStorage){
-    //if the basket is empty//
-    if (cartStorage === null){
-      cartItems.innerHTML = "<p>Votre panier est vide, n'hésitez pas à aller découvrir nos kanapés !</p>";
-    } else {
-      //If the basket is not empty//
+for (let i = 0; i < cartStorage.length; i++) {
+  let url = `http://localhost:3000/api/products/${cartStorage[i].id}`;
+  fetch(url).then(function(res) {
+    if (res.ok) {
+      return res.json();
+    }
+  }).then(function(data) {
+    function insertProducts(data) {
       cartItems.innerHTML = `<article class="cart__item" data-id="${data.id}" data-color="${data.color}">
       <div class="cart__item__img">
         <img src="${data.imageUrl}" alt="${data.altTxt}">
@@ -42,10 +37,10 @@ function getProduct(){
         </div>
       </div>
     </article>`;
-    }
-  }
+    };
+    insertProducts();
+  })
 }
-getProduct();
 //change the quantity of the product//
 function changeQuantity() {
   let input = document.querySelectorAll('.itemQuantity'); //NodeList
