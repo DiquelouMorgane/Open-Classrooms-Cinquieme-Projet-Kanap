@@ -1,11 +1,9 @@
 //Redirection to confirmation page condition//
-function confirmOrder (){
-  let str = window.location.href;
-  if (str === './confirmation.html'){
-    let newUrl = new URL(str);
-    let orderId = newUrl.searchParams.get('id');
-    document.querySelector('#orderId').innerHTML = `<span id="${orderId}"><!-- 65431343444684674 --></span>`;
-  }
+if (document.title == "Confirmation") {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const validConfirmation = document.getElementById("orderId");
+  validConfirmation.innerText = id;
 }
 //---------------------------------------------------------------Basket Products------------------------------------------------------------------//
 for (let i = 0; i < cartStorage.length; i++) {
@@ -90,7 +88,7 @@ function basketTotalPrice() {
   }
   document.querySelector('#totalPrice').innerText = totalPrice;
 }
-basketTotalPrice();
+basketTotalPrice();*/
 //calculate the total articles//
 function basketTotalArticles() {
   let finalQuantity = 0;
@@ -99,7 +97,7 @@ function basketTotalArticles() {
   };
   document.querySelector('#totalQuantity').innerText = finalQuantity;
 }
-basketTotalArticles();*/  
+basketTotalArticles(); 
 //load the elements during the loading page //
 window.onload=function(){
   getProduct();
