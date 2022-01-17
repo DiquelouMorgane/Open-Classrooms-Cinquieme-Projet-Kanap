@@ -1,6 +1,7 @@
 //--------------------------------------------------------Product Page Part-------------------------------------------------------------//
 const productId = getProductId();
 const productContent = getCardProducts(productId);
+const selected = document.getElementById('colors');
 var product;
 //retrieve the product id//
 function getProductId () {
@@ -33,46 +34,50 @@ function cardProducts(data) {
       }
     }
 //--------------------------------------------------------Basket Part-------------------------------------------------------------//
-//add the wanted product in an array, stock in the Local Storage//
-function newProductObject (arrayData) {
-    //Basket creation in the LocalStorage//
-    let cartStorage = JSON.parse(localStorage.getItem("cartStorage"));
-    if (cartStorage == null) {
-        cartStorage = [];
-    }
-    console.log(cartStorage);
-    //Create a new Product Card to save//
-    let productQuantity = document.querySelector('#quantity').value;
-    let productColor = document.querySelector('#colors').value;
-    let newProduct = {
-        id : `${arrayData._id}`,
-        quantity : productQuantity,
-        color : productColor,
-    };
-    localStorage.setItem('newProduct', JSON.stringify(newProduct));
-    //Add the wanted product for each product wanted//
-    let idValue = newProduct['id'];
-    let colorValue = newProduct['color'];
-    let quantityValue = newProduct['quantity'];
-    if (localStorage.cartStorage == null) {
-        cartStorage.push(newProduct);
-    } else if (localStorage.cartStorage.includes(idValue) && localStorage.cartStorage.includes(colorValue)) {
-        for (let i = 0; i < cartStorage.length; i++) {
-            if (cartStorage[i].id === idValue && cartStorage[i].color === colorValue) {
-                let index = cartStorage[i];
-                let newQuantityValue = Number(quantityValue) + Number(index.quantity);
-                index.quantity = newQuantityValue.toString();
-            }
+const addToCart = document.getElementById("addToCart");
+addToCart.addEventListener("click", function() {
+    const choosenColor = selected.value;
+    const inputQuantity = document.getElementById('quantity');
+    const choosenQuantity = inputQuantity.value;
+    if (choosenColor == "" && (choosenQuantity < 1 || choosenQuantity > 100)) {
+        alert("N'oubliez pas de choisir un colori parmi notre gamme, et un nombre d'exemplaire (attention, les commandes sont limitées à 100 produits !");
+    } else if (choosenColor == "") {
+        alert("Il semblerait que vous ayez oublié de choisir parmi nos coloris proposés !");
+    } else if (choosenQuantity < 1 || choosenQuantity > 100) {
+        if (choosenQuantity > 100) {
+            alert("Attention, les commandes sont limitées à 100 articles maximum !");
+        }
+        else {
+            alert("Veuillez renseigner un nombre d'articles valide s'il vous plaît !")
         }
     } else {
-        cartStorage.push(newProduct);
-    }
-    //save the wanted product in the LocalStorage//
-    const addToCart = document.getElementById("addToCart");
-    addToCart.addEventListener("click", function() {
-        console.log(product)
-        localStorage.setItem("cartStorage",JSON.stringify([{...product,color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}]));
+        const choosenProductId = productId + choosenColor;
+        const product = {
+            id : productId,
+            quantity : choosenQuantity,
+            color : choosenColor,
+        };
+        let productInLocalStorage = JSON.parse(localStorage.getItem("products"));
+        if (productInLocalStorage) {
+            const index = productInLocalStorage.findIndex(item => item.id == productId)
+            if (index != -1) {
+                const newQuantity = Number(productInLocalStorage[index].itemQuantity) + Number(quantity);
+                const newProduct = {
+                    id : productId,
+                    quantity : choosenQuantity,
+                    color : choosenColor,
+                }
+                productInLocalStorage.splice(index, 1, newProduct);
+            } else {
+                productInLocalStorage.push(product);
+            }
+        } else {
+            productInLocalStorage = [];
+            productInLocalStorage.push(product);
+        }
+        localStorage.setItem("products", JSON.stringify([{...product,color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}]));
+        alert("Votre produit a bien été ajouté au panier, n'hésitez pas à aller vois le reste de nos canapés !");
         console.log(localStorage);
-        });
-    }
-};
+        }
+    })
+}
