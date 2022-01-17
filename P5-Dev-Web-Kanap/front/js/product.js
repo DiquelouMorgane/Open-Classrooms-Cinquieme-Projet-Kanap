@@ -51,20 +51,20 @@ addToCart.addEventListener("click", function() {
             alert("Veuillez renseigner un nombre d'articles valide s'il vous plaît !")
         }
     } else {
-        const choosenProductId = productId + choosenColor;
+        const specificId = productId + choosenColor;
         const product = {
-            id : productId,
+            id : specificId,
             quantity : choosenQuantity,
             color : choosenColor,
         };
         let productInLocalStorage = JSON.parse(localStorage.getItem("products"));
         if (productInLocalStorage) {
-            const index = productInLocalStorage.findIndex(item => item.id == productId)
+            const index = productInLocalStorage.findIndex(item => item.id == specificId)
             if (index != -1) {
                 const newQuantity = Number(productInLocalStorage[index].itemQuantity) + Number(quantity);
                 const newProduct = {
-                    id : productId,
-                    quantity : choosenQuantity,
+                    id : specificId,
+                    quantity : newQuantity,
                     color : choosenColor,
                 }
                 productInLocalStorage.splice(index, 1, newProduct);
