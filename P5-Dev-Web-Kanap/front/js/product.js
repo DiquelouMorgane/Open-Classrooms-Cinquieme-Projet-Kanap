@@ -39,6 +39,7 @@ addToCart.addEventListener("click", function() {
     const choosenColor = selected.value;
     const inputQuantity = document.getElementById('quantity');
     const choosenQuantity = inputQuantity.value;
+    console.log(choosenQuantity);
     if (choosenColor == "" && (choosenQuantity < 1 || choosenQuantity > 100)) {
         alert("N'oubliez pas de choisir un colori parmi notre gamme, et un nombre d'exemplaire (attention, les commandes sont limitées à 100 produits !");
     } else if (choosenColor == "") {
@@ -51,23 +52,14 @@ addToCart.addEventListener("click", function() {
             alert("Veuillez renseigner un nombre d'articles valide s'il vous plaît !")
         }
     } else {
-        const specificId = productId + choosenColor;
-        const product = {
-            id : specificId,
-            quantity : choosenQuantity,
-            color : choosenColor,
-        };
+        product.color = choosenColor;
+        product.quantity = parseInt(choosenQuantity);
         let productInLocalStorage = JSON.parse(localStorage.getItem("products"));
         if (productInLocalStorage) {
-            const index = productInLocalStorage.findIndex(item => item.id == specificId)
+            const index = productInLocalStorage.findIndex(item => item._id == product._id && item.color == product.color)
             if (index != -1) {
-                const newQuantity = Number(productInLocalStorage[index].itemQuantity) + Number(quantity);
-                const newProduct = {
-                    id : specificId,
-                    quantity : newQuantity,
-                    color : choosenColor,
-                }
-                productInLocalStorage.splice(index, 1, newProduct);
+                console.log(quantity);
+                productInLocalStorage[index].quantity = product.quantity
             } else {
                 productInLocalStorage.push(product);
             }
@@ -75,7 +67,7 @@ addToCart.addEventListener("click", function() {
             productInLocalStorage = [];
             productInLocalStorage.push(product);
         }
-        localStorage.setItem("products", JSON.stringify([{...product,color: document.getElementById('colors').value, quantity: document.getElementById('quantity').value}]));
+        localStorage.setItem("products", JSON.stringify(productInLocalStorage));
         alert("Votre produit a bien été ajouté au panier, n'hésitez pas à aller vois le reste de nos canapés !");
         console.log(localStorage);
         }
