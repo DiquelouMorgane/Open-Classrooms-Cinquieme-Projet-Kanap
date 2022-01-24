@@ -4,11 +4,11 @@ if (document.title == "Cart") {
 //---------------------------------------------------------------Basket Products------------------------------------------------------------------//
 let cartStorage = JSON.parse(localStorage.getItem("products"));
 const orderButton = document.getElementById("order");
+const products = [];
 const contact = {};
 //retrieve the wanted product//
 function getProduct(){
   let cartItems = document.getElementById('cart__items');
-  console.log(cartStorage);
   //insert the wanted product in the basket//
     //if the basket is empty//
     if (cartStorage === null){
@@ -70,7 +70,7 @@ function removeItem() {
   let i = deleteButton.length-1;
   deleteButton[i].addEventListener('click', function() {
     cartStorage.splice(i, 1);
-    localStorage.setItem('cartStorage', JSON.stringify(cartStorage));
+    localStorage.removeItem('cartStorage', JSON.stringify(cartStorage));
     location.reload();
   });
 };
