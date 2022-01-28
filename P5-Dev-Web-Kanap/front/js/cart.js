@@ -3,6 +3,7 @@ if (document.title == "Cart") {
   //if it's not the Confirmation Page we create the basket//
   //---------------------------------------------------------------Basket Products------------------------------------------------------------------//
   let cartStorage = JSON.parse(localStorage.getItem("products"));
+  console.log(cartStorage);
   const orderButton = document.getElementById("order");
   const products = [];
   const contact = {};
@@ -15,7 +16,7 @@ if (document.title == "Cart") {
       cartItems.innerHTML = "<p>Votre panier est vide, n'hésitez pas à aller découvrir nos kanapés !</p>";
     } else {
     //If the basket is not empty//
-      for (i = 0; i < cartStorage.length; i ++) {
+      for (let i = 0; i < cartStorage.length; i ++) {
         console.log(cartStorage[i]);
         let data = cartStorage[i];
         let article = document.createElement("article");
@@ -44,37 +45,37 @@ if (document.title == "Cart") {
       }
     }
   }
-  getProduct();
   //change the quantity of the product//
   function changeQuantity() {
     let input = document.querySelectorAll('.itemQuantity');
-    let i = input.length-1;
-    input[i].addEventListener('change', function() {
-        if (this.value <= 0) {
-          this.value = 0;
-          cartStorage.splice(i, 1);
-        } else if (this.value > 100) {
-          this.value = 100;
-          cartStorage[i].quantity = this.value;
-        } else {
-          cartStorage[i].quantity = this.value;
-        }
-      localStorage.setItem('cartStorage', JSON.stringify(cartStorage));
-      location.reload();
-    })
+    for (let i = 0; i < cartStorage.length; i++){
+      input[i].addEventListener('change', function() {
+        console.log(this.value);
+          if (this.value <= 0) {
+            this.value = 0;
+            cartStorage.splice(i, 1);
+          } else if (this.value > 100) {
+            this.value = 100;
+            cartStorage[i].quantity = this.value;
+          } else {
+            cartStorage[i].quantity = this.value;
+          }
+        localStorage.setItem('products', JSON.stringify(cartStorage));
+        location.reload();
+      })
+    }
   };
-  changeQuantity();
   //delete products no longer wanted//
-  function removeItem() {
+  function deleteItem() {
     let deleteButton = document.querySelectorAll('.deleteItem');
-    let i = deleteButton.length-1;
-    deleteButton[i].addEventListener('click', function() {
-      cartStorage.splice(i, 1);
-      localStorage.removeItem('cartStorage', JSON.stringify(cartStorage));
-      location.reload();
-    });
+    for (let j = 0; j < cartStorage.length; j++){
+      deleteButton[j].addEventListener('click', function() {
+        cartStorage.splice(j, 1);
+        localStorage.removeItem('products', JSON.stringify(cartStorage));
+        location.reload();
+      });
+    }
   };
-  removeItem();
   //calculate the total articles//
   function basketTotalArticles() {
     let finalQuantity = 0;
@@ -90,17 +91,17 @@ if (document.title == "Cart") {
     for (let j = 0; j < cartStorage.length; j++) {
       let productPriceInBasket = cartStorage[j].price * cartStorage[j].quantity;
       totalPriceCalcul.push(productPriceInBasket);
-      console.log(totalPriceCalcul);
     }
     const reducer = (accumulateur, currentValue) => accumulateur + currentValue;
     const totalPrice = totalPriceCalcul.reduce(reducer,0);
-    console.log(totalPrice);
     document.querySelector('#totalPrice').innerText = totalPrice;
   }
   BasketTotalPrice();
   //load the elements during the loading page // 
   window.onload=function(){
     getProduct();
+    changeQuantity();
+    deleteItem();
   }
   //---------------------------------------------------------------Form part------------------------------------------------------------------//
   //Check the form//
