@@ -8,7 +8,8 @@ function showProducts() {
     .then(function(data) {
         formatProducts(data);
     })
-    .catch(function(err){
+    .catch(function(){
+        alert ("Nos stocks se refont une beauté, n'hésitez pas à repasser ultérieurement !");
     });
 }
 //--------------------------------------------------------Index Content-------------------------------------------------------------//

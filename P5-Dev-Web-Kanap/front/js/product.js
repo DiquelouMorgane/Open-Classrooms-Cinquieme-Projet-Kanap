@@ -4,8 +4,8 @@ const productContent = getCardProducts(productId);
 const selected = document.getElementById('colors');
 var product;
 //retrieve the product id//
-function getProductId () {
-    const url = new URLSearchParams(window.location.search); 
+function getProductId() {
+    const url = new URLSearchParams(window.location.search);
     return url.get("id");
 }
 //retrieve the product in data base//
@@ -18,7 +18,8 @@ function getCardProducts(productId){
         product = data;
         cardProducts (data);
     })
-    .catch(function(err){
+    .catch(function(){
+        alert ("Nous n'avons pas encore de produits en stocks, n'hésitez pas à repasser ultérieurement !");
     });
 //Insert the selected product in the Product page//
 function cardProducts(data) {
@@ -31,15 +32,14 @@ function cardProducts(data) {
           data.colors[color],
           data.colors[color]
         );
-      }
     }
+}
 //--------------------------------------------------------Basket Part-------------------------------------------------------------//
 const addToCart = document.getElementById("addToCart");
 addToCart.addEventListener("click", function() {
     const choosenColor = selected.value;
     const inputQuantity = document.getElementById('quantity');
     const choosenQuantity = inputQuantity.value;
-    console.log(choosenQuantity);
     if (choosenColor == "" && (choosenQuantity < 1 || choosenQuantity > 100)) {
         alert("N'oubliez pas de choisir un colori parmi notre gamme, et un nombre d'exemplaire (attention, les commandes sont limitées à 100 produits !");
     } else if (choosenColor == "") {
@@ -58,7 +58,6 @@ addToCart.addEventListener("click", function() {
         if (productInLocalStorage) {
             const index = productInLocalStorage.findIndex(item => item._id == product._id && item.color == product.color)
             if (index != -1) {
-                console.log(quantity);
                 productInLocalStorage[index].quantity = product.quantity
             } else {
                 productInLocalStorage.push(product);
