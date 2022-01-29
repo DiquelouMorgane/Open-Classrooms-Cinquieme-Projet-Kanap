@@ -68,12 +68,11 @@ if (document.title == "Cart") {
   //delete products no longer wanted//
   function deleteItem() {
     let deleteButton = document.querySelectorAll('.deleteItem');
-    for (let j = 0; j < cartStorage.length; j++){
+    let product = product.filter(p => p._id != product._id);
+    for (let j = 0; j < cartStorage.lenght; j++){
       deleteButton[j].addEventListener('click', function() {
-        cartStorage.splice(j, 1);
-        localStorage.removeItem('products', JSON.stringify(cartStorage));
-        location.reload();
-      });
+        localStorage.deleteItem('products', JSON.stringify(cartStorage));
+      })
     }
   };
   //calculate the total articles//
