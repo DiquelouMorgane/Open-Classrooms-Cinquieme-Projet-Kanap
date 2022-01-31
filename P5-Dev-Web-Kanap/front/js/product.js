@@ -68,7 +68,6 @@ addToCart.addEventListener("click", function() {
         }
         localStorage.setItem("products", JSON.stringify(productInLocalStorage));
         alert("Votre produit a bien été ajouté au panier, n'hésitez pas à aller vois le reste de nos canapés !");
-        console.log(localStorage);
         }
     })
 }

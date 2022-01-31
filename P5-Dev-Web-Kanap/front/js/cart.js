@@ -3,7 +3,6 @@ if (document.title == "Cart") {
   //if it's not the Confirmation Page we create the basket//
   //---------------------------------------------------------------Basket Products------------------------------------------------------------------//
   let cartStorage = JSON.parse(localStorage.getItem("products"));
-  console.log(cartStorage);
   const orderButton = document.getElementById("order");
   const products = [];
   const contact = {};
