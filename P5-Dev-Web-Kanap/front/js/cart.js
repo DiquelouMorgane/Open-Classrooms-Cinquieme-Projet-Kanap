@@ -66,20 +66,26 @@ if (document.title == "Cart") {
     }
   };
   //delete products no longer wanted//
-  function deleteItem() {
-    let deleteButton = document.querySelectorAll('.deleteItem');
-    let product = product.filter(p => p._id != product._id);
-    for (let j = 0; j < cartStorage.lenght; j++){
-      deleteButton[j].addEventListener('click', function() {
-        localStorage.deleteItem('products', JSON.stringify(cartStorage));
-      })
+  function removeItem() {
+    let deleteButton = document.getElementsByClassName('deleteItem');
+    for (let j = 0; j < cartStorage.length; j++){
+      deleteButton[j].addEventListener("click", (event) => {
+        event.preventDefault();
+        let productId = cartStorage[j]._id;
+        cartStorage = cartStorage.filter(
+          (el) => el._id !== productId);
+        console.log(cartStorage);
+        localStorage.setItem("products", JSON.stringify(cartStorage));
+        location.reload();
+        alert("Ce produit a bien été supprimé du panier");
+      });
     }
   };
   //calculate the total articles//
   function basketTotalArticles() {
     let finalQuantity = 0;
-    for (let i = 0; i < cartStorage.length; i++) {
-      finalQuantity += Number(cartStorage[i].quantity);
+    for (let k = 0; k < cartStorage.length; k++) {
+      finalQuantity += Number(cartStorage[k].quantity);
     };
     document.querySelector('#totalQuantity').innerText = finalQuantity;
   }
@@ -87,8 +93,8 @@ if (document.title == "Cart") {
   //calculate the total price//
   function BasketTotalPrice() {
     let totalPriceCalcul = [];
-    for (let j = 0; j < cartStorage.length; j++) {
-      let productPriceInBasket = cartStorage[j].price * cartStorage[j].quantity;
+    for (let l = 0; l < cartStorage.length; l++) {
+      let productPriceInBasket = cartStorage[l].price * cartStorage[l].quantity;
       totalPriceCalcul.push(productPriceInBasket);
     }
     const reducer = (accumulateur, currentValue) => accumulateur + currentValue;
@@ -100,7 +106,7 @@ if (document.title == "Cart") {
   window.onload=function(){
     getProduct();
     changeQuantity();
-    deleteItem();
+    removeItem();
   }
   //---------------------------------------------------------------Form part------------------------------------------------------------------//
   //Check the form//
